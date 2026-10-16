@@ -38,6 +38,8 @@ const TimetableSlot = sequelize.define('TimetableSlot', {
   { unique: true, fields: ['RoomId', 'day', 'period'], name: 'uniq_room_slot' },
   { unique: true, fields: ['SectionId', 'day', 'period'], name: 'uniq_section_slot' },
 ] });
+// Which teacher teaches which subject to which section (generator input)
+const Assignment = sequelize.define('Assignment', {}, { indexes: [{ unique: true, fields: ['SectionId', 'SubjectId'], name: 'uniq_section_subject' }] });
 const ClassUpdate = sequelize.define('ClassUpdate', {
   type: { type: D.ENUM('cancel', 'reschedule', 'substitute'), allowNull: false },
   reason: D.TEXT,
@@ -54,6 +56,8 @@ Section.hasMany(TimetableSlot); Subject.hasMany(TimetableSlot); Teacher.hasMany(
 TimetableSlot.belongsTo(Section); TimetableSlot.belongsTo(Subject); TimetableSlot.belongsTo(Teacher); TimetableSlot.belongsTo(Room);
 TimetableSlot.hasMany(ClassUpdate); ClassUpdate.belongsTo(TimetableSlot);
 ClassUpdate.belongsTo(Teacher, { as: 'newTeacher' }); ClassUpdate.belongsTo(User, { as: 'by' });
+Section.hasMany(Assignment); Subject.hasMany(Assignment); Teacher.hasMany(Assignment);
+Assignment.belongsTo(Section); Assignment.belongsTo(Subject); Assignment.belongsTo(Teacher);
 User.hasMany(AuditLog); AuditLog.belongsTo(User);
 
-module.exports = { sequelize, Section, User, Teacher, Subject, Room, TeacherUnavailability, TimetableSlot, ClassUpdate, AuditLog };
+module.exports = { sequelize, Section, User, Teacher, Subject, Room, TeacherUnavailability, TimetableSlot, Assignment, ClassUpdate, AuditLog };
