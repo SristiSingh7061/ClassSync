@@ -14,17 +14,17 @@ app.use(express.json({ limit: '100kb' }));
 app.use('/api/auth', rateLimit({
   windowMs: 15 * 60 * 1000, limit: 30, skipSuccessfulRequests: true,
   standardHeaders: 'draft-7', legacyHeaders: false,
-  message: { message: 'Bahut zyada galat koshish. 15 minute baad dobara try karo.' },
+  message: { message: 'Too many failed attempts. Please try again in 15 minutes.' },
 }));
 
 app.use('/api', require('./routes'));
 
-app.use((req, res) => res.status(404).json({ message: 'Route nahi mila' }));
+app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 app.use((err, req, res, next) => {
   console.error(err);
   const status = err.status || 500;
   const message = status >= 500 && process.env.NODE_ENV === 'production'
-    ? 'Server mein kuch gadbad hui. Thodi der baad dobara try karo.'  // never leak DB errors in production
+    ? 'Something went wrong on the server. Please try again shortly.'  // never leak DB errors in production
     : err.message || 'Server error';
   res.status(status).json({ message });
 });

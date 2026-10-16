@@ -50,21 +50,21 @@ function Generate() {
       const r = await api('/timetable/generate', { method: 'POST', body });
       if (sel) await preview(sel);
       return r;
-    }, 'Routine ban gaya. Neeche preview dekho.');
+    }, 'Timetable generated. Preview it below.');
     setBusy(false);
   };
 
   return (
     <div className="space-y-4">
       <div className="panel space-y-3">
-        <h2 className="font-display text-xl font-bold">Timetable generate karo</h2>
-        <p className="text-sm text-ink/70">Pehle teachers, rooms, subjects banao aur Assign tab mein teacher-subject-section jodo. Phir yahan Generate dabao.</p>
+        <h2 className="font-display text-xl font-bold">Generate timetable</h2>
+        <p className="text-sm text-ink/70">First, create teachers, rooms, and subjects, then assign teachers to subjects and sections in the Assign tab. Then click Generate here.</p>
         <div className="flex flex-wrap items-center gap-2">
           <select className="field w-auto" value={sel} onChange={(e) => { setSel(e.target.value); preview(e.target.value); }}>
-            <option value="">Saare sections</option>
+            <option value="">All sections</option>
             {sections.map((s) => <option key={s.id} value={s.id}>Section {s.name} (Sem {s.semester})</option>)}
           </select>
-          <button className="btn" onClick={generate} disabled={busy}>{busy ? 'Ban raha hai…' : 'Generate'}</button>
+          <button className="btn" onClick={generate} disabled={busy}>{busy ? 'Generating…' : 'Generate'}</button>
         </div>
         <Msg msg={msg} />
       </div>
@@ -79,19 +79,19 @@ function Teachers() {
   const [msg, run] = useAction();
   const add = async (e) => {
     e.preventDefault();
-    if (await run(() => api('/teachers', { method: 'POST', body: form }), 'Teacher ban gaya.')) {
+    if (await run(() => api('/teachers', { method: 'POST', body: form }), 'Teacher created.')) {
       setForm({ name: '', email: '', password: '', department: '' }); load();
     }
   };
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <form onSubmit={add} className="panel space-y-3">
-        <h2 className="font-display text-xl font-bold">Naya teacher</h2>
-        <input className="field" placeholder="Naam" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        <h2 className="font-display text-xl font-bold">New teacher</h2>
+        <input className="field" placeholder="Name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         <input className="field" type="email" placeholder="Email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
         <input className="field" type="password" placeholder="Password (min 8)" minLength={8} required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
         <input className="field" placeholder="Department (optional)" value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} />
-        <button className="btn w-full">Teacher banao</button>
+        <button className="btn w-full">Create teacher</button>
         <Msg msg={msg} />
       </form>
       <div className="panel">
@@ -103,7 +103,7 @@ function Teachers() {
               <span className="text-ink/60">id {t.id} · {t.User?.email}</span>
             </li>
           ))}
-          {!rows.length && <li className="py-2 text-ink/60">Abhi koi teacher nahi.</li>}
+          {!rows.length && <li className="py-2 text-ink/60">No teachers yet.</li>}
         </ul>
       </div>
     </div>
@@ -116,22 +116,22 @@ function Rooms() {
   const [msg, run] = useAction();
   const add = async (e) => {
     e.preventDefault();
-    if (await run(() => api('/rooms', { method: 'POST', body: { ...form, capacity: Number(form.capacity) } }), 'Room ban gaya.')) {
+    if (await run(() => api('/rooms', { method: 'POST', body: { ...form, capacity: Number(form.capacity) } }), 'Room created.')) {
       setForm({ name: '', type: 'classroom', capacity: 60 }); load();
     }
   };
-  const remove = async (id) => { if (await run(() => api(`/rooms/${id}`, { method: 'DELETE' }), 'Room delete ho gaya.')) load(); };
+  const remove = async (id) => { if (await run(() => api(`/rooms/${id}`, { method: 'DELETE' }), 'Room deleted.')) load(); };
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <form onSubmit={add} className="panel space-y-3">
-        <h2 className="font-display text-xl font-bold">Naya room</h2>
-        <input className="field" placeholder="Naam (e.g. Room 102)" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        <h2 className="font-display text-xl font-bold">New room</h2>
+        <input className="field" placeholder="Name (e.g. Room 102)" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         <select className="field" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
           <option value="classroom">Classroom</option>
           <option value="lab">Lab</option>
         </select>
         <input className="field" type="number" min="1" placeholder="Capacity" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} />
-        <button className="btn w-full">Room banao</button>
+        <button className="btn w-full">Create room</button>
         <Msg msg={msg} />
       </form>
       <div className="panel">
@@ -157,18 +157,18 @@ function Subjects() {
   const add = async (e) => {
     e.preventDefault();
     const body = { ...form, weeklyCount: Number(form.weeklyCount), semester: Number(form.semester) };
-    if (await run(() => api('/subjects', { method: 'POST', body }), 'Subject ban gaya.')) { setForm(blank); load(); }
+    if (await run(() => api('/subjects', { method: 'POST', body }), 'Subject created.')) { setForm(blank); load(); }
   };
-  const remove = async (id) => { if (await run(() => api(`/subjects/${id}`, { method: 'DELETE' }), 'Subject delete ho gaya.')) load(); };
+  const remove = async (id) => { if (await run(() => api(`/subjects/${id}`, { method: 'DELETE' }), 'Subject deleted.')) load(); };
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <form onSubmit={add} className="panel space-y-3">
-        <h2 className="font-display text-xl font-bold">Naya subject</h2>
-        <input className="field" placeholder="Naam (e.g. Operating Systems)" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        <h2 className="font-display text-xl font-bold">New subject</h2>
+        <input className="field" placeholder="Name (e.g. Operating Systems)" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         <input className="field" placeholder="Code (e.g. CS502)" required value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} />
         <select className="field" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
           <option value="theory">Theory</option>
-          <option value="lab">Lab (2 periods ka block)</option>
+          <option value="lab">Lab (2-period block)</option>
         </select>
         <div className="grid grid-cols-2 gap-2">
           <label className="text-xs font-medium">Periods / week
@@ -178,7 +178,7 @@ function Subjects() {
             <input className="field mt-1" type="number" min="1" max="8" value={form.semester} onChange={(e) => setForm({ ...form, semester: e.target.value })} />
           </label>
         </div>
-        <button className="btn w-full">Subject banao</button>
+        <button className="btn w-full">Create subject</button>
         <Msg msg={msg} />
       </form>
       <div className="panel">
@@ -202,22 +202,22 @@ function Sections() {
   const [msg, run] = useAction();
   const add = async (e) => {
     e.preventDefault();
-    if (await run(() => api('/sections', { method: 'POST', body: { name: form.name.trim(), semester: Number(form.semester) } }), 'Section ban gaya.')) {
+    if (await run(() => api('/sections', { method: 'POST', body: { name: form.name.trim(), semester: Number(form.semester) } }), 'Section created.')) {
       setForm({ name: '', semester: form.semester }); load();
     }
   };
-  const remove = async (id) => { if (await run(() => api(`/sections/${id}`, { method: 'DELETE' }), 'Section delete ho gaya.')) load(); };
+  const remove = async (id) => { if (await run(() => api(`/sections/${id}`, { method: 'DELETE' }), 'Section deleted.')) load(); };
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <form onSubmit={add} className="panel space-y-3">
-        <h2 className="font-display text-xl font-bold">Naya section</h2>
-        <input className="field" placeholder="Naam (e.g. A)" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        <h2 className="font-display text-xl font-bold">New section</h2>
+        <input className="field" placeholder="Name (e.g. A)" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         <label className="block text-xs font-medium">Semester
           <input className="field mt-1" type="number" min="1" max="8" value={form.semester} onChange={(e) => setForm({ ...form, semester: e.target.value })} />
         </label>
-        <button className="btn w-full">Section banao</button>
+        <button className="btn w-full">Create section</button>
         <Msg msg={msg} />
-        <p className="text-xs text-ink/60">Students register karte waqt yahi sections dekhenge.</p>
+        <p className="text-xs text-ink/60">Students will see these sections when they register.</p>
       </form>
       <div className="panel">
         <h2 className="mb-3 font-display text-xl font-bold">Sections ({rows.length})</h2>
@@ -228,7 +228,7 @@ function Sections() {
               <button className="btn-quiet" onClick={() => remove(s.id)}>Delete</button>
             </li>
           ))}
-          {!rows.length && <li className="py-2 text-ink/60">Abhi koi section nahi.</li>}
+          {!rows.length && <li className="py-2 text-ink/60">No sections yet.</li>}
         </ul>
       </div>
     </div>
@@ -245,26 +245,26 @@ function Assign() {
   const add = async (e) => {
     e.preventDefault();
     const body = { teacherId: Number(form.teacherId), subjectId: Number(form.subjectId), sectionId: Number(form.sectionId) };
-    if (await run(() => api('/assignments', { method: 'POST', body }), 'Assignment save ho gayi.')) load();
+    if (await run(() => api('/assignments', { method: 'POST', body }), 'Assignment saved.')) load();
   };
-  const remove = async (id) => { if (await run(() => api(`/assignments/${id}`, { method: 'DELETE' }), 'Assignment hat gayi.')) load(); };
+  const remove = async (id) => { if (await run(() => api(`/assignments/${id}`, { method: 'DELETE' }), 'Assignment removed.')) load(); };
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <form onSubmit={add} className="panel space-y-3">
-        <h2 className="font-display text-xl font-bold">Kaun kya padhayega</h2>
+        <h2 className="font-display text-xl font-bold">Assign subjects to teachers</h2>
         <select className="field" required value={form.teacherId} onChange={(e) => setForm({ ...form, teacherId: e.target.value })}>
-          <option value="">Teacher chuno…</option>
+          <option value="">Select teacher…</option>
           {teachers.map((t) => <option key={t.id} value={t.id}>{t.User?.name}</option>)}
         </select>
         <select className="field" required value={form.subjectId} onChange={(e) => setForm({ ...form, subjectId: e.target.value })}>
-          <option value="">Subject chuno…</option>
+          <option value="">Select subject…</option>
           {subjects.map((s) => <option key={s.id} value={s.id}>{s.name} ({s.code})</option>)}
         </select>
         <select className="field" required value={form.sectionId} onChange={(e) => setForm({ ...form, sectionId: e.target.value })}>
-          <option value="">Section chuno…</option>
+          <option value="">Select section…</option>
           {sections.map((s) => <option key={s.id} value={s.id}>Section {s.name} (Sem {s.semester})</option>)}
         </select>
-        <button className="btn w-full">Assign karo</button>
+        <button className="btn w-full">Assign</button>
         <Msg msg={msg} />
       </form>
       <div className="panel">
@@ -276,10 +276,10 @@ function Assign() {
                 <span className="font-medium">{a.Subject?.name}</span>
                 <span className="text-ink/60"> · Section {a.Section?.name} · {a.Teacher?.User?.name}</span>
               </span>
-              <button className="btn-quiet" onClick={() => remove(a.id)}>Hatao</button>
+              <button className="btn-quiet" onClick={() => remove(a.id)}>Remove</button>
             </li>
           ))}
-          {!rows.length && <li className="py-2 text-ink/60">Abhi koi assignment nahi.</li>}
+          {!rows.length && <li className="py-2 text-ink/60">No assignments yet.</li>}
         </ul>
       </div>
     </div>

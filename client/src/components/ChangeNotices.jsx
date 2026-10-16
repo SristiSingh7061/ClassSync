@@ -1,7 +1,7 @@
 import { PERIOD_TIMES } from '../config';
 import { fmtDate, ymd } from '../lib';
 
-// "Class mein badlav": upcoming cancellations, shifted classes and substitutes
+// Upcoming cancellations, rescheduled classes, and substitutes
 export default function ChangeNotices({ changes = [], subs = [] }) {
   const today = ymd(new Date());
   const items = [

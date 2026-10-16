@@ -31,6 +31,7 @@ export default function Student() {
           <ChangeNotices changes={data.changes} subs={data.subs} />
           <ScheduleView week={view} />
         </div>
+        
       ) : (
         <p className="text-sm text-ink/60">The routine is loading…</p>
       )}

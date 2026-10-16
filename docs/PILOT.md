@@ -1,54 +1,54 @@
-# ClassSync: Pilot plan (5-10 real users, 2-3 din)
+# ClassSync: Pilot plan (5-10 real users, 2-3 days)
 
 ## Goal
-Real logon se check karna ki: (1) routine sahi dikhta hai, (2) cancel / shift / substitute ka alert turant pahunchta hai, (3) koi kuch samajh nahi paata to kahan.
+Test with real users to verify that: (1) the timetable displays correctly, (2) cancellation, rescheduling, and substitute alerts arrive promptly, and (3) users can identify anything that is unclear.
 
-## Kaun kaun
-| Role | Kitne | Kaun |
+## Participants
+| Role | Count | Who |
 |---|---|---|
-| HOD | 1 | Dr. ya senior faculty (ya tum khud demo ke liye) |
-| Teacher | 2-3 | Jo faculty tayyar ho |
-| Student | 5-8 | Apne section ke classmates (alag-alag phone: Android / iPhone) |
+| HOD | 1 | A doctor or senior faculty member (or yourself for the demo) |
+| Teacher | 2-3 | Any faculty members who are available |
+| Student | 5-8 | Students from your section (use different phones: Android / iPhone) |
 
-## Pehle se taiyari (tum)
-- [ ] App deploy ho chuka hai aur `/api/health` `ok` deta hai
-- [ ] HOD login chalta hai, section, rooms, subjects, teachers bana diye
-- [ ] Assign + Generate chala diya, routine dikh raha hai
-- [ ] Teachers ko email + password diye (khud badalne ko bolo)
-- [ ] Students ko link bheja (WhatsApp group)
+## Preparation
+- [ ] The app is deployed and `/api/health` returns `ok`
+- [ ] HOD login works; sections, rooms, subjects, and teachers have been created
+- [ ] Assign and Generate have been run, and the timetable is visible
+- [ ] Teachers have received their email and password (ask them to change the password)
+- [ ] The app link has been shared with students (WhatsApp group)
 
-## Tasks (har user ko ye script do)
-| # | Role | Task | Kya dekhna hai |
+## Tasks (give each user these instructions)
+| # | Role | Task | What to observe |
 |---|---|---|---|
-| 1 | Student | Account banao, section chuno | 1 minute ke andar ho gaya? |
-| 2 | Student | "Aaj ki agli class" kya hai batao | Bina poochhe mila? |
-| 3 | Teacher | Kal ki ek class cancel karo (reason ke saath) | Student phone pe alert kitni der mein aaya? |
-| 4 | Teacher | Ek class dusre period mein shift karo | Clash ka message samajh aaya? |
-| 5 | Teacher | Kisi dusre teacher ko substitute maango, wo accept kare | Student ko "X ki jagah Y" dikha? |
-| 6 | Teacher | Galti se cancel kiya, Undo karo | Class wapas normal? |
-| 7 | HOD | Analytics aur Audit log kholo | Sab numbers samajh aaye? |
+| 1 | Student | Create an account and select a section | Did it take less than 1 minute? |
+| 2 | Student | Find the next class today | Could they find it without help? |
+| 3 | Teacher | Cancel a class for tomorrow and provide a reason | How long did the alert take to reach the student's phone? |
+| 4 | Teacher | Reschedule a class to another period | Was the conflict message clear? |
+| 5 | Teacher | Request a substitute from another teacher and have them accept | Did the student see "Y instead of X"? |
+| 6 | Teacher | Cancel a class, then undo the cancellation | Did the class return to its normal state? |
+| 7 | HOD | Open Analytics and the Audit log | Were all the numbers clear? |
 
-## Kya naapna hai
+## Metrics
 | Metric | Target |
 |---|---|
-| Cancel dabane se student ke screen pe alert | 3 second se kam |
-| Task bina madad ke poora kiya | 80% se zyada |
-| Koi crash / blank page | 0 |
-| "Seedha samajh aaya" (1-5 rating) | 4 se upar |
+| Time from cancelling a class to the alert appearing on the student's screen | Under 3 seconds |
+| Tasks completed without help | More than 80% |
+| Crashes / blank pages | 0 |
+| "It was easy to understand" rating (1-5) | Above 4 |
 
-## Feedback form (Google Form ke 6 sawal)
-1. Aap kaun ho (student / teacher / HOD)?
-2. Kaun sa kaam sabse aasan laga?
-3. Kahan atak gaye?
-4. Alert kitni jaldi mila? (turant / kuch second / der se / nahi mila)
-5. WhatsApp PDF ke mukable kya better laga?
-6. Ek cheez jo sabse pehle badalni chahiye?
+## Feedback form (6 Google Form questions)
+1. What is your role (student / teacher / HOD)?
+2. Which task was easiest?
+3. Where did you get stuck?
+4. How quickly did you receive the alert? (immediately / within seconds / late / not received)
+5. What did you prefer over the WhatsApp PDF?
+6. What is the first thing you would change?
 
 ## Bug log
-| # | Kisne | Kya hua | Phone / browser | Gambhirta (high/med/low) | Fix hua? |
+| # | Reported by | What happened | Phone / browser | Severity (high/med/low) | Fixed? |
 |---|---|---|---|---|---|
 
-## Pilot ke baad
-- [ ] High wale bugs fix karo, dobara 2 log se test
-- [ ] Feedback ke top 3 points README ke "Known limits" mein ya agle version mein likho
-- [ ] Final PPT ke liye: screenshots, alert ka time, user quotes
+## After the pilot
+- [ ] Fix high-priority bugs and test again with 2 users
+- [ ] Add the top 3 feedback items to the README's "Known limits" or a future version
+- [ ] For the final presentation: screenshots, alert timing, and user quotes
