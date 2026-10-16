@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body { @apply bg-paper font-sans text-ink antialiased; }
+  h1, h2, h3 { @apply font-display; }
+  :focus-visible { @apply outline outline-2 outline-offset-2 outline-brand; }
+}
+@layer components {
+  .field { @apply w-full rounded-lg border border-line bg-white px-3 py-2.5 text-sm focus:border-brand; }
+  .btn { @apply inline-flex items-center justify-center rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition active:scale-[.98] disabled:opacity-50; }
+  .btn-quiet { @apply inline-flex items-center justify-center rounded-lg border border-line bg-white px-3 py-2 text-sm font-medium text-ink; }
+  .panel { @apply rounded-xl border border-line bg-white p-4; }
+}
