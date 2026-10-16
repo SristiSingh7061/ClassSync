@@ -1,10 +1,31 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const { corsOrigin } = require('./services/origins');
+
 const app = express();
+app.set('trust proxy', 1);                 // Render / Vercel sit behind a proxy
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
-app.use(express.json());
+app.use(cors({ origin: corsOrigin() }));
+app.use(express.json({ limit: '100kb' }));
+
+// Brute-force protection: only FAILED login/register attempts are counted
+app.use('/api/auth', rateLimit({
+  windowMs: 15 * 60 * 1000, limit: 30, skipSuccessfulRequests: true,
+  standardHeaders: 'draft-7', legacyHeaders: false,
+  message: { message: 'Bahut zyada galat koshish. 15 minute baad dobara try karo.' },
+}));
+
 app.use('/api', require('./routes'));
-app.use((err, req, res, next) => { console.error(err); res.status(err.status || 500).json({ message: err.message || 'Server error' }); });
+
+app.use((req, res) => res.status(404).json({ message: 'Route nahi mila' }));
+app.use((err, req, res, next) => {
+  console.error(err);
+  const status = err.status || 500;
+  const message = status >= 500 && process.env.NODE_ENV === 'production'
+    ? 'Server mein kuch gadbad hui. Thodi der baad dobara try karo.'  // never leak DB errors in production
+    : err.message || 'Server error';
+  res.status(status).json({ message });
+});
 module.exports = app;

@@ -1,5 +1,13 @@
 require('dotenv').config();
 const http = require('http');
+const { checkEnv } = require('./services/env');
+
+const problems = checkEnv();
+if (problems.length) {
+  console.error('Startup blocked:\n - ' + problems.join('\n - '));
+  process.exit(1);
+}
+
 const app = require('./app');
 const { sequelize } = require('./models');
 require('./models/slotChange');           // registers the SlotChanges table

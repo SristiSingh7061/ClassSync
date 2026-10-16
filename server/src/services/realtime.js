@@ -2,11 +2,12 @@
 const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { corsOrigin } = require('./origins');
 
 let io = null;
 
 exports.initSocket = (httpServer) => {
-  io = new Server(httpServer, { cors: { origin: process.env.CLIENT_URL || '*' } });
+  io = new Server(httpServer, { cors: { origin: corsOrigin() } });
 
   io.use(async (socket, next) => {
     try {
