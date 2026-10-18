@@ -2,7 +2,7 @@
 
 A live class routine for a college department. It replaces the routine PDF that gets forwarded on WhatsApp.
 The HOD builds a conflict-free timetable in one click; when a teacher cancels, shifts or hands over a class,
-students see it **instantly** ( live alerts + optional emails).
+students see it **instantly** (live alerts + optional emails).
 
 
 
