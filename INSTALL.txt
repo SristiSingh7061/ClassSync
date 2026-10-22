@@ -1,15 +1,1 @@
-ClassSync Week 8: deploy + hardening + docs
-
-STEP 0  Right click zip -> Extract All
-STEP 1  Copy into ClassSync (merge, Replace):
-          README.md, .gitignore, docs/            -> ClassSync/            (root, next to server and client)
-          server/src/*   (app.js, server.js, seed-prod.js, services/*)  -> ClassSync/server/src
-          server/tests/  -> ClassSync/server/tests
-          client/index.html, client/vercel.json, client/.env.example  -> ClassSync/client
-          client/src/pages/Admin.jsx, Login.jsx   -> ClassSync/client/src/pages
-STEP 2  Terminal in server:  npm install express-rate-limit
-STEP 3  server/package.json -> inside "scripts" add these 2 lines (mind the commas):
-          "seed:prod": "node src/seed-prod.js",
-          "test": "node src/test-generator.js && node tests/logic.test.js"
-STEP 4  Check:  npm test          (must end with: All server logic tests passed)
-        Restart server (npm run dev).  Locally NODE_ENV is not "production", so nothing changes for you.
+.
